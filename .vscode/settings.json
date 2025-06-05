@@ -4,6 +4,7 @@
         "firstname",
         "gearvn",
         "lastname",
+        "mainboard",
         "Permisstion"
     ]
 }

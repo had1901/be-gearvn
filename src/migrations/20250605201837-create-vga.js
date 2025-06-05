@@ -2,20 +2,41 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Category', {
+    await queryInterface.createTable('Vga', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      tag: {
-        type: Sequelize.STRING
-      },
       name: {
         type: Sequelize.STRING
       },
-      slug: {
+      brand: {
+        type: Sequelize.STRING
+      },
+      gpu_model: {
+        type: Sequelize.STRING
+      },
+      vram: {
+        type: Sequelize.INTEGER
+      },
+      memory_type: {
+        type: Sequelize.STRING
+      },
+      core_clock: {
+        type: Sequelize.INTEGER
+      },
+      boost_clock: {
+        type: Sequelize.INTEGER
+      },
+      tdp: {
+        type: Sequelize.INTEGER
+      },
+      length_mm: {
+        type: Sequelize.INTEGER
+      },
+      ports: {
         type: Sequelize.STRING
       },
       createdAt: {
@@ -29,6 +50,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Category');
+    await queryInterface.dropTable('Vga');
   }
 };

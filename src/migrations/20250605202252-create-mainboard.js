@@ -2,20 +2,41 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Category', {
+    await queryInterface.createTable('Mainboard', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      tag: {
-        type: Sequelize.STRING
-      },
       name: {
         type: Sequelize.STRING
       },
-      slug: {
+      brand: {
+        type: Sequelize.STRING
+      },
+      chipset: {
+        type: Sequelize.STRING
+      },
+      socket: {
+        type: Sequelize.STRING
+      },
+      form_factor: {
+        type: Sequelize.STRING
+      },
+      ram_slots: {
+        type: Sequelize.INTEGER
+      },
+      max_ram: {
+        type: Sequelize.INTEGER
+      },
+      ram_type: {
+        type: Sequelize.STRING
+      },
+      pcie_slots: {
+        type: Sequelize.INTEGER
+      },
+      storage_support: {
         type: Sequelize.STRING
       },
       createdAt: {
@@ -29,6 +50,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Category');
+    await queryInterface.dropTable('Mainboard');
   }
 };

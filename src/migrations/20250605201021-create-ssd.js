@@ -2,21 +2,36 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Category', {
+    await queryInterface.createTable('Ssd', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      tag: {
-        type: Sequelize.STRING
-      },
       name: {
         type: Sequelize.STRING
       },
-      slug: {
+      brand: {
         type: Sequelize.STRING
+      },
+      storage: {
+        type: Sequelize.INTEGER
+      },
+      type: {
+        type: Sequelize.STRING
+      },
+      interface: {
+        type: Sequelize.STRING
+      },
+      read_speed: {
+        type: Sequelize.INTEGER
+      },
+      write_speed: {
+        type: Sequelize.INTEGER
+      },
+      warranty: {
+        type: Sequelize.INTEGER
       },
       createdAt: {
         allowNull: false,
@@ -29,6 +44,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Category');
+    await queryInterface.dropTable('Ssd');
   }
 };

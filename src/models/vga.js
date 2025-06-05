@@ -3,7 +3,7 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class Category extends Model {
+  class Vga extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -11,18 +11,26 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Category.hasMany(models.Product, { foreignKey: 'category_id'})
+      Vga.hasMany(models.Product_config, { foreignKey: 'vga_id' })
+
     }
   }
-  Category.init({
-    tag: DataTypes.STRING,
+  Vga.init({
     name: DataTypes.STRING,
-    slug: DataTypes.STRING
+    brand: DataTypes.STRING,
+    gpu_model: DataTypes.STRING,
+    vram: DataTypes.INTEGER,
+    memory_type: DataTypes.STRING,
+    core_clock: DataTypes.INTEGER,
+    boost_clock: DataTypes.INTEGER,
+    tdp: DataTypes.INTEGER,
+    length_mm: DataTypes.INTEGER,
+    ports: DataTypes.STRING
   }, {
     sequelize,
-    modelName: 'Category',
+    modelName: 'Vga',
     freezeTableName: true
 
   });
-  return Category;
+  return Vga;
 };
