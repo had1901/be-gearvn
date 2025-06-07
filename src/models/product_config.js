@@ -30,7 +30,6 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'Product_config',
-    modelName: 'Payment',
   });
   return Product_config;
 };
