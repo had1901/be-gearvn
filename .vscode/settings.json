@@ -3,8 +3,11 @@
         "ductoclx",
         "firstname",
         "gearvn",
+        "HASHSECRET",
         "lastname",
         "mainboard",
-        "Permisstion"
+        "Permisstion",
+        "TMNCODE",
+        "uuidv"
     ]
 }

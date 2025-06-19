@@ -14,6 +14,8 @@ module.exports = (sequelize, DataTypes) => {
       User.belongsTo(models.Role, { foreignKey: 'role_id' })
       User.hasMany(models.Order, { foreignKey: 'user_id' })
       User.hasMany(models.Payment, {foreignKey: 'user_id'})
+      User.hasMany(models.Payment, {foreignKey: 'user_id'})
+      User.hasMany(models.Cart_item, {foreignKey: 'user_id'})
     }
   }
   User.init({

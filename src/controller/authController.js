@@ -4,15 +4,17 @@ const { where } = require('sequelize')
 const db = require('../models/index.js')
 const {hashPassword, checkPassword} = require('../ultils/auth.js')
 const jwt = require('jsonwebtoken')
+const { OAuth2Client } = require('google-auth-library');
 const dotenv = require('dotenv')
 const environment = process.env.NODE_ENV || 'development'
 dotenv.config({path: `.env.${environment}`})
 
+
+
+
 const authController = {
     login: async (req, res, next) => {
         const { username, password } = req.body
-        console.log('login', req.body)
-        console.log('model-role', db.Role)
         console.log('associations', db.User.associations)
         try {
             const checkUser = await db.User.findOne({
@@ -45,12 +47,11 @@ const authController = {
                 nest: true,
                 raw: true,
             })
-            console.log('product', product)
             if(!checkUser) {
                 const err = new Error('Tài khoản không đúng')
                 return next(err)
             }
-            console.log('Đăng nhập', checkUser)
+            // console.log('Đăng nhập', checkUser)
             const comparePassword = await checkPassword(password, checkUser.password)
             if(!comparePassword) {
                 const err = new Error('Mật khẩu không đúng')
@@ -205,6 +206,84 @@ const authController = {
                 message: 'Refresh_token is not provided',
                 ec: -1,
                 hasToken: false
+            })
+        }
+    },
+    googleLogin: async (req, res, next) => {
+        const { token } = req.body
+        const client = new OAuth2Client(process.env.GOOGLE_ID)
+
+        if (!token) {
+            return res.status(404).json({ 
+                ms: 'Missing token', 
+                ec: 1 
+            })
+        }
+
+        try{
+            const ticket = await client.verifyIdToken({
+                idToken: req.body.token,
+                audience: process.env.GOOGLE_ID
+            })
+            if(!ticket) {
+                return res.status(404).json({ 
+                    ms: 'Missing ticket', 
+                    ec: 1 
+                })
+            }
+            const payload = ticket.getPayload()
+            const { name, email, picture } = payload
+
+            let checkUser = await db.User.findOne({
+                where: { username: name, email: email }
+            })
+
+            if(!checkUser) {
+                checkUser = await db.User.create({
+                    username: name,
+                    email: email,
+                    avatar: picture,
+                    phone: null,
+                    address: null,
+                    firstname: null,
+                    lastname: null,
+                    role_id: 3,
+                })
+            }
+            const payloadUser = {
+                id: checkUser.id,
+                username: checkUser.username,
+                email: checkUser.email,
+                role_id: checkUser.role_id
+              }
+            console.log('user', checkUser)
+            const access_token = jwt.sign(payloadUser, process.env.SECRET_KEY, { expiresIn: '10m', audience: 'client', issuer: 'myapp.com', algorithm: 'HS512'})
+            const refresh_token = jwt.sign(payloadUser, process.env.SECRET_KEY, { expiresIn: '7d', audience: 'client', issuer: 'myapp.com', algorithm: 'HS512'})
+            
+            res.cookie('access_token', access_token, { 
+                httpOnly:true,
+                // secure: false,
+                // sameSite: 'none',
+                maxAge: 600000,
+                path: '/'
+            })
+            res.cookie('refresh_token', refresh_token, { 
+                httpOnly:true,
+                // secure: false,
+                // sameSite: 'none',
+                maxAge: 7 * 24 * 60 * 60 * 1000,
+                path: '/'
+            })
+            return res.status(200).json({
+                ms: 'Login google successfully',
+                ec: 0,
+                dt: { name, email, picture }
+            })
+        } catch(e) {
+            console.log('error', e)
+            return res.status(400).json({
+                ms: 'Login fail',
+                ec: 1,
             })
         }
     },

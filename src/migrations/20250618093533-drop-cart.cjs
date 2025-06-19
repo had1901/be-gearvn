@@ -9,10 +9,7 @@ module.exports = {
      * Example:
      * await queryInterface.createTable('users', { id: Sequelize.INTEGER });
      */
-    return queryInterface.addColumn('product', 'thumbnail', {
-      type: Sequelize.STRING,
-      allowNull: true, // hoặc false tùy ý
-    })
+    await queryInterface.dropTable('Cart');
   },
 
   async down (queryInterface, Sequelize) {
@@ -22,6 +19,18 @@ module.exports = {
      * Example:
      * await queryInterface.dropTable('users');
      */
-    return queryInterface.removeColumn('product', 'thumbnail')
+    await queryInterface.createTable('Cart', {
+      id: {
+        type: Sequelize.INTEGER,
+        primaryKey: true,
+        autoIncrement: true
+      },
+      user_id: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+      },
+      createdAt: Sequelize.DATE,
+      updatedAt: Sequelize.DATE
+    })
   }
 };

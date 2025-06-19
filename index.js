@@ -3,18 +3,22 @@ const cors =require('cors')
 const cookieParser =require('cookie-parser')
 const connectDatabase =require('./src/connect/index.js')
 const dotenv = require('dotenv')
+dotenv.config()
 const renameFiles =require('./src/middleware/renameFiles.js')
 const userRouter =require('./src/routes/user.js')
+const cartRouter =require('./src/routes/cart.js')
+const productRouter =require('./src/routes/product.js')
+const paymentRouter =require('./src/routes/payment.js')
 const handleError = require('./src/middleware/handleError.js')
-dotenv.config()
 
 const app = express()
 const port = 8888
 
 // connect database
 connectDatabase()
-const allowedOrigins = ['http://localhost:5173', 'https://your-production-site.com']
+
 // middleware
+const allowedOrigins = ['http://localhost:5173', 'https://your-production-site.com']
 app.use(cors({
     origin: function (origin, callback) {
         if (!origin || allowedOrigins.includes(origin)) {
@@ -31,12 +35,16 @@ app.use(cookieParser())
 app.use(renameFiles)
 
 
+userRouter(app)
+cartRouter(app)
+productRouter(app)
+paymentRouter(app)
+
 app.get('/', (req, res) => {
     res.json('Hello')
 })
 
 
-userRouter(app)
 
 
 app.use(handleError)
