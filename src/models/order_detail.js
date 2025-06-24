@@ -12,6 +12,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       Order_detail.belongsTo(models.Order, {foreignKey: 'order_id'})
+      Order_detail.belongsTo(models.Product, {foreignKey: 'product_id'})
 
     }
   }
@@ -26,6 +27,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'Order_detail',
+    freezeTableName: true
   });
   return Order_detail;
 };

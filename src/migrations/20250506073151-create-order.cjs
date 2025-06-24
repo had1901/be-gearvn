@@ -16,22 +16,22 @@ module.exports = {
           key: 'id'
         }
       },
-      price: {
-        type: Sequelize.INTEGER
+      order_code: {
+        type: Sequelize.STRING
       },
       total_price: {
         type: Sequelize.INTEGER
       },
-      total_products: {
-        type: Sequelize.INTEGER
+      ship_cod: {
+        type: Sequelize.STRING
       },
-      total_discount: {
+      discount: {
         type: Sequelize.INTEGER
       },
       shipping_address: {
         type: Sequelize.STRING
       },
-      note_text: {
+      pay_method: {
         type: Sequelize.STRING
       },
       status_payment: {

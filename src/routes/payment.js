@@ -83,9 +83,8 @@ const payment = (app) => {
     //     return res.json({ redirectUrl: vnp_url })
     // })
 
-    
-    
     router.post('/create-payment-url', (req, res, next) => {
+        console.log('pay', req.body)
         const vnpay = new VNPay({
             // Thông tin cấu hình bắt buộc
             tmnCode: process.env.VNP_TMNCODE,
@@ -107,20 +106,22 @@ const payment = (app) => {
                 getBankListEndpoint: 'qrpayauth/api/merchant/get_bank_list', // Endpoint lấy danh sách ngân hàng
             }
         })
+        const now = new Date();
+        const expireDate = new Date(now.getTime() + 15 * 60 * 1000)
         const tomorrow = new Date()
         tomorrow.setDate(tomorrow.getDate() + 1)
         const txnRef = uuidv4().replace(/-/g, '')
 
         const paymentUrl = vnpay.buildPaymentUrl({
-            vnp_Amount: 10000,
+            vnp_Amount: req.body.amount,
             vnp_IpAddr: '127.0.0.1',
             vnp_TxnRef: `order_${txnRef}`,
-            vnp_OrderInfo: `Thanh toan don hang order_${txnRef}`,
+            vnp_OrderInfo: `order_${txnRef}`,
             vnp_OrderType: ProductCode.Other,
             vnp_ReturnUrl: 'http://localhost:5173/payment/vnpay-return',
             vnp_Locale: VnpLocale.VN, // 'vn' hoặc 'en'
             vnp_CreateDate: dateFormat(new Date()), // tùy chọn, mặc định là thời gian hiện tại
-            vnp_ExpireDate: dateFormat(tomorrow), // tùy chọn
+            vnp_ExpireDate: dateFormat(expireDate), // tùy chọn
         })
         return res.status(201).json({ redirectUrl: paymentUrl})
     })

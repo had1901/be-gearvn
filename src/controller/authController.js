@@ -48,13 +48,13 @@ const authController = {
                 raw: true,
             })
             if(!checkUser) {
-                const err = new Error('Tài khoản không đúng')
+                const err = new Error('Tài khoản hoặc mật khẩu không đúng')
                 return next(err)
             }
             // console.log('Đăng nhập', checkUser)
             const comparePassword = await checkPassword(password, checkUser.password)
             if(!comparePassword) {
-                const err = new Error('Mật khẩu không đúng')
+                const err = new Error('Tài khoản hoặc mật khẩu không đúng')
                 return next(err)
             }
 
@@ -232,10 +232,11 @@ const authController = {
                 })
             }
             const payload = ticket.getPayload()
-            const { name, email, picture } = payload
-
+            const { id, name, email, picture } = payload
+            console.log('payload', payload)
             let checkUser = await db.User.findOne({
-                where: { username: name, email: email }
+                where: { username: name, email: email },
+                raw: true
             })
 
             if(!checkUser) {
@@ -277,7 +278,12 @@ const authController = {
             return res.status(200).json({
                 ms: 'Login google successfully',
                 ec: 0,
-                dt: { name, email, picture }
+                dt: { 
+                    id: checkUser.id, 
+                    name: checkUser.username, 
+                    email: checkUser.email, 
+                    picture: checkUser.avatar 
+                }
             })
         } catch(e) {
             console.log('error', e)

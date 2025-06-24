@@ -9,6 +9,7 @@ const userRouter =require('./src/routes/user.js')
 const cartRouter =require('./src/routes/cart.js')
 const productRouter =require('./src/routes/product.js')
 const paymentRouter =require('./src/routes/payment.js')
+const orderRouter =require('./src/routes/order.js')
 const handleError = require('./src/middleware/handleError.js')
 
 const app = express()
@@ -39,6 +40,7 @@ userRouter(app)
 cartRouter(app)
 productRouter(app)
 paymentRouter(app)
+orderRouter(app)
 
 app.get('/', (req, res) => {
     res.json('Hello')
