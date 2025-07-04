@@ -110,13 +110,13 @@ const payment = (app) => {
         const expireDate = new Date(now.getTime() + 15 * 60 * 1000)
         const tomorrow = new Date()
         tomorrow.setDate(tomorrow.getDate() + 1)
-        const txnRef = uuidv4().replace(/-/g, '')
+        // const txnRef = uuidv4().replace(/-/g, '')
 
         const paymentUrl = vnpay.buildPaymentUrl({
             vnp_Amount: req.body.amount,
             vnp_IpAddr: '127.0.0.1',
-            vnp_TxnRef: `order_${txnRef}`,
-            vnp_OrderInfo: `order_${txnRef}`,
+            vnp_TxnRef: req.body.orderCode,
+            vnp_OrderInfo: req.body.orderCode,
             vnp_OrderType: ProductCode.Other,
             vnp_ReturnUrl: 'http://localhost:5173/payment/vnpay-return',
             vnp_Locale: VnpLocale.VN, // 'vn' hoặc 'en'

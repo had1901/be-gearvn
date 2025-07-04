@@ -1,6 +1,7 @@
 const express =require('express')
 const cors =require('cors')
 const cookieParser =require('cookie-parser')
+const bodyParser = require('body-parser')
 const connectDatabase =require('./src/connect/index.js')
 const dotenv = require('dotenv')
 dotenv.config()
@@ -30,8 +31,10 @@ app.use(cors({
     },
     credentials: true
 }))
+
 app.use(express.json())
 app.use(cookieParser())
+app.use(bodyParser.json())
 
 app.use(renameFiles)
 

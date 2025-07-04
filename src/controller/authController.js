@@ -153,7 +153,6 @@ const authController = {
     },
     refreshToken: async (req, res) => {
         const refreshToken = req.cookies?.refresh_token
-        console.log('refresh', refreshToken)
         if(refreshToken) {
             return jwt.verify(refreshToken, process.env.SECRET_KEY, (err, decoded) => {
                 if (err) {
@@ -293,6 +292,31 @@ const authController = {
             })
         }
     },
-
+    getAll: async (req,res,next) => {
+        try{
+            const users = await db.User.findAll({ 
+                include: [
+                    { 
+                        model: db.Role,
+                        // attributes: ['id', 'order_id', 'product_id', 'quantity', 'price', 'discount', 'status'],
+                    }
+                ],
+                nest: true, 
+            })
+            if(users.length > 0) {
+                return res.status(200).json({
+                    ms: 'Get all user',
+                    ec: 0,
+                    dt: users
+                }) 
+            }
+            return res.status(204).json({
+                ms: 'Not found users',
+                ec: 0,
+            }) 
+        }catch(e){
+            return next(e)
+        }
+    },
 }
 module.exports = authController

@@ -11,6 +11,7 @@ const userRouter = (app) => {
     router.get('/profile', verifyToken, authController.profile)
     router.post('/refresh-token', authController.refreshToken)
     router.post('/logout', authController.logout)
+    router.get('/get-all-user', authController.getAll)
 
 
     return app.use('/auth', router)

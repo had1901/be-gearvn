@@ -1,4 +1,5 @@
 
+const { Sequelize } = require('sequelize')
 const db = require('../models/index.js')
 const dotenv = require('dotenv')
 const environment = process.env.NODE_ENV || 'development'
@@ -8,6 +9,7 @@ dotenv.config({path: `.env.${environment}`})
 const orderController = {
     create: async (req,res,next) => {
         const { userId, carts, genre, name, total, orderCode, phone, cityCode, districtCode, wardCode, houseNumber, methodPay } = req.body
+        console.log(req.body)
         try{
             if(userId) {
                 const fullAddress = `${houseNumber} - ${wardCode} - ${districtCode} - ${cityCode}`
@@ -47,7 +49,7 @@ const orderController = {
         
     
     },
-    getAll: async (req,res,next) => {
+    getOrdersByUser: async (req,res,next) => {
         const { userId } = req.body
         if(userId) {
             try{
@@ -66,7 +68,6 @@ const orderController = {
                     ],
                     nest: true, 
                 })
-                console.log(orders)
                 if(orders.length > 0) {
                     return res.status(200).json({
                         ms: 'Get all order',
@@ -85,7 +86,85 @@ const orderController = {
         
         
     
-    }
+    },
+    getAll: async (req,res,next) => {
+        try{
+            const orders = await db.Order.findAll({ 
+                include: [
+                    { 
+                        model: db.Order_detail,
+                        attributes: ['id', 'order_id', 'product_id', 'quantity', 'price', 'discount', 'status'],
+                        include: [
+                            {
+                                model: db.Product
+                            }
+                        ] 
+                    }
+                    
+                ],
+                nest: true, 
+            })
+            if(orders.length > 0) {
+                return res.status(200).json({
+                    ms: 'Get all order',
+                    ec: 0,
+                    dt: orders
+                }) 
+            }
+            return res.status(204).json({
+                ms: 'Not found orders',
+                ec: 0,
+            }) 
+        }catch(e){
+            return next(e)
+        }
+    },
+    getGroupByDate: async (req,res,next) => {
+        try{
+            const orders = await db.Order.findAll({ 
+                attributes: [
+                    'id',
+                    'user_id',
+                    'order_code',
+                    'total_price',
+                    'ship_cod',
+                    'discount',
+                    'shipping_address',
+                    'pay_method',
+                    'status_payment',
+                    'status_transpost',
+                    [Sequelize.fn('DATE', Sequelize.col('Order.createdAt')), 'date'],
+                    [Sequelize.fn('COUNT', Sequelize.col('Order.id')), 'totalOrders']
+                ],
+                group: [Sequelize.fn('DATE', Sequelize.col('Order.createdAt'))],
+                include: [
+                    { 
+                        model: db.Order_detail,
+                        attributes: ['id', 'order_id', 'product_id', 'quantity', 'price', 'discount', 'status'],
+                        include: [
+                            {
+                                model: db.Product
+                            }
+                        ] 
+                    }
+                    
+                ],
+                nest: true, 
+            })
+            if(orders.length > 0) {
+                return res.status(200).json({
+                    ms: 'Get all order',
+                    ec: 0,
+                    dt: orders
+                }) 
+            }
+            return res.status(204).json({
+                ms: 'Not found orders',
+                ec: 0,
+            }) 
+        }catch(e){
+            return next(e)
+        }
+    },
 }
-
 module.exports = orderController
