@@ -13,7 +13,7 @@ const productController = {
     getAll: async (req,res,next) => {
         try{
             const products = await db.Product.findAll({
-                attributes: ['id', 'name', 'description', 'thumbnail', 'price', 'sale_price', 'flash_sale', 'sale_percent', 'stock_quantity', 'rating_count', 'category_id', 'brand_id'],
+                // attributes: ['id', 'name', 'description', 'thumbnail', 'price', 'sale_price', 'flash_sale', 'sale_percent', 'stock_quantity', 'rating_count', 'category_id', 'brand_id'],
                 include: [
                     { 
                         model: db.Brand,
@@ -29,6 +29,7 @@ const productController = {
                     },
                 ],
                 logging: false,
+                order: [['createdAt', 'DESC']]
                 // nest: true,
                 // raw: true,
             })  
@@ -472,13 +473,19 @@ const productController = {
                 }) 
             }
             const { id } = createdProduct.dataValues
-            const collectionImage = collection?.map(url => (
-                {
-                    url,
-                    product_id: id
-                }
-            ))
-            if(collectionImage.length > 0) {
+            let collectionImage
+            if(Array.isArray(collection) && collection.length > 0) {
+                collectionImage = collection.map(url => (
+                    {
+                        url,
+                        product_id: id
+                    }
+                ))
+            } else {
+                collectionImage = { url: collection, product_id: id }
+            }
+            
+            if(collectionImage || collectionImage.length > 0) {
                 await db.Product_images.bulkCreate(collectionImage, { transaction: transactionInstance })
             }
 

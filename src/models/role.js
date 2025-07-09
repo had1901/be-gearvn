@@ -11,7 +11,12 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       Role.hasMany(models.User, { foreignKey: 'role_id' })
-      Role.belongsToMany(models.Permisstion, { through: 'role_permisstion' })
+      Role.hasMany(models.Role_permisstion, { foreignKey: 'role_id' })
+      Role.belongsToMany(models.Permisstion, {
+        through: models.Role_permisstion,
+        foreignKey: 'role_id',         // ✅ khóa ngoại trỏ từ Role_permission -> Role
+        otherKey: 'permisstion_id',    // ✅ khóa ngoại trỏ từ Role_permission -> Permisstion
+      })
     }
   }
   Role.init({

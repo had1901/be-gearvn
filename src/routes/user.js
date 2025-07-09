@@ -11,7 +11,11 @@ const userRouter = (app) => {
     router.get('/profile', verifyToken, authController.profile)
     router.post('/refresh-token', authController.refreshToken)
     router.post('/logout', authController.logout)
-    router.get('/get-all-user', authController.getAll)
+
+    router.get('/admin/read-accounts', authController.read)
+    router.post('/admin/create-account', authController.create)
+    router.put('/admin/update-account', authController.update)
+    router.delete('/admin/delete-account/:id', authController.remove)
 
 
     return app.use('/auth', router)

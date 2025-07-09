@@ -11,12 +11,16 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Permisstion.belongsToMany(models.Role, { through: 'role_permisstion' })
-
+      Permisstion.hasMany(models.Role_permisstion, { foreignKey: 'permisstion_id' })
+      Permisstion.belongsToMany(models.Role, {
+        through: models.Role_permisstion,
+        foreignKey: 'permisstion_id',  // ✅ trỏ từ Role_permission -> Permisstion
+        otherKey: 'role_id',           // ✅ trỏ từ Role_permission -> Role
+      })
     }
   }
   Permisstion.init({
-    path: DataTypes.STRING
+    action: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'Permisstion',

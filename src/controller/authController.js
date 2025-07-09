@@ -107,7 +107,7 @@ const authController = {
                 avatar: null,
                 firstname: null,
                 lastname: null,
-                role_id: 3,
+                role_id: 2,
             })
             return res.status(201).json({
                 message: 'Đăng ký thành công',
@@ -292,16 +292,28 @@ const authController = {
             })
         }
     },
-    getAll: async (req,res,next) => {
+
+    read: async (req,res,next) => {
         try{
+            console.log('associations', db.Role.associations)
             const users = await db.User.findAll({ 
                 include: [
                     { 
                         model: db.Role,
-                        // attributes: ['id', 'order_id', 'product_id', 'quantity', 'price', 'discount', 'status'],
+                        include: [
+                            {   
+                                model: db.Permisstion,
+                                //  through: {
+                                //     attributes: [] // không lấy thông tin trung gian nếu không cần
+                                // }
+                            }
+                        ]
                     }
                 ],
-                nest: true, 
+                order: [
+                    [db.Sequelize.literal(`Role.id = '1'`), 'DESC'],
+                    ['createdAt', 'DESC'],
+                ]
             })
             if(users.length > 0) {
                 return res.status(200).json({
@@ -318,5 +330,103 @@ const authController = {
             return next(e)
         }
     },
+    create: async (req,res,next) => {
+        console.log(req.body)
+        const { username, email, roleId, permissionId } = req.body
+
+        try{
+            const [user, created] = await db.User.findOrCreate({ 
+                where: { username: username },
+                defaults: {
+                    username,
+                    email,
+                    role_id: roleId
+                }
+            })
+            
+            if(!created) {
+                return res.status(409).json({
+                    ms: 'Tên đăng nhập đã tồn tại',
+                    ec: 1,
+                }) 
+            }
+            
+            // const { id } = user.dataValues
+            // let permissionList 
+            // if(permissionId.length > 0) {
+            //     permissionList = permissionId.map(numberId => (
+            //         {
+            //             role_id: id,
+            //             permisstion_id: numberId
+            //         }
+            //     ))
+            //     await db.User.bulkCreate(permissionList)
+            // }
+            
+            return res.status(201).json({
+                ms: 'Tạo thành công',
+                ec: 0,
+            }) 
+
+        }catch(e){
+            return next(e)
+        }
+    },
+    update: async (req,res,next) => {
+        console.log(req.body)
+        return res.status(200).json({
+                    ms: 'update all user',
+                    ec: 0,
+                    // dt: users
+                })
+        try{
+            console.log('associations', db.Role.associations)
+            const users = await db.User.findAll({ 
+                include: [
+                    { 
+                        model: db.Role,
+                        include: [
+                            {   
+                                model: db.Permisstion,
+                                //  through: {
+                                //     attributes: [] // không lấy thông tin trung gian nếu không cần
+                                // }
+                            }
+                        ]
+                        // attributes: ['id', 'order_id', 'product_id', 'quantity', 'price', 'discount', 'status'],
+                    }
+                ],
+                // nest: true, 
+            })
+            // console.log(users)
+            if(users.length > 0) {
+                return res.status(200).json({
+                    ms: 'Get all user',
+                    ec: 0,
+                    dt: users
+                }) 
+            }
+            return res.status(204).json({
+                ms: 'Not found users',
+                ec: 0,
+            }) 
+        }catch(e){
+            return next(e)
+        }
+    },
+    remove: async (req,res,next) => {
+        const { id } = req.params
+        console.log(id)
+        try{
+            await db.User.destroy({ where: { id } })
+            return res.status(200).json({
+                ms: 'Xóa thành công',
+                ec: 0,
+            }) 
+        }catch(e){
+            return next(e)
+        }
+    },
 }
+
 module.exports = authController
