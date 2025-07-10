@@ -293,6 +293,33 @@ const authController = {
         }
     },
 
+    readById: async (req,res,next) => {
+        const { id } = req.params
+        try{
+            const user = await db.User.findOne({ 
+                where: { id: id },
+                include: [
+                    { 
+                        model: db.Role,
+                        
+                    }
+                ],
+            })
+            if(user) {
+                return res.status(200).json({
+                    ms: 'Get user',
+                    ec: 0,
+                    dt: user
+                }) 
+            }
+            return res.status(404).json({
+                ms: 'Not found users',
+                ec: 0,
+            }) 
+        }catch(e){
+            return next(e)
+        }
+    },
     read: async (req,res,next) => {
         try{
             console.log('associations', db.Role.associations)
@@ -322,7 +349,7 @@ const authController = {
                     dt: users
                 }) 
             }
-            return res.status(204).json({
+            return res.status(404).json({
                 ms: 'Not found users',
                 ec: 0,
             }) 
@@ -374,29 +401,11 @@ const authController = {
     },
     update: async (req,res,next) => {
         console.log(req.body)
-        return res.status(200).json({
-                    ms: 'update all user',
-                    ec: 0,
-                    // dt: users
-                })
+        
         try{
-            console.log('associations', db.Role.associations)
-            const users = await db.User.findAll({ 
-                include: [
-                    { 
-                        model: db.Role,
-                        include: [
-                            {   
-                                model: db.Permisstion,
-                                //  through: {
-                                //     attributes: [] // không lấy thông tin trung gian nếu không cần
-                                // }
-                            }
-                        ]
-                        // attributes: ['id', 'order_id', 'product_id', 'quantity', 'price', 'discount', 'status'],
-                    }
-                ],
-                // nest: true, 
+            const users = await db.User.update({ 
+                w
+                 
             })
             // console.log(users)
             if(users.length > 0) {

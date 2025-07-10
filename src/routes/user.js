@@ -13,6 +13,7 @@ const userRouter = (app) => {
     router.post('/logout', authController.logout)
 
     router.get('/admin/read-accounts', authController.read)
+    router.get('/admin/read-accounts/:id', authController.readById)
     router.post('/admin/create-account', authController.create)
     router.put('/admin/update-account', authController.update)
     router.delete('/admin/delete-account/:id', authController.remove)
