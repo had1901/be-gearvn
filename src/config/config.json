@@ -8,17 +8,19 @@
     "logging" : false
   },
   "test": {
-    "username": "root",
-    "password": null,
-    "database": "gearvn",
-    "host": "127.0.0.1",
-    "dialect": "mysql"
+    "username": "lccqyija_ductoclx01",
+    "password": "1912001d",
+    "database": "lccqyija_gear-vn",
+    "host": "103.97.126.29",
+    "dialect": "mysql",
+    "logging" : false
   },
   "production": {
     "username": "lccqyija_ductoclx01",
     "password": "1912001d",
     "database": "lccqyija_gear-vn",
-    "host": "127.0.0.1",
-    "dialect": "mysql"
+    "host": "103.97.126.29",
+    "dialect": "mysql",
+    "logging" : false
   }
 }
