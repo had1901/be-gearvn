@@ -4,7 +4,6 @@ const cookieParser =require('cookie-parser')
 const bodyParser = require('body-parser')
 const connectDatabase =require('./src/connect/index.js')
 const dotenv = require('dotenv')
-dotenv.config()
 const renameFiles =require('./src/middleware/renameFiles.js')
 const userRouter =require('./src/routes/user.js')
 const cartRouter =require('./src/routes/cart.js')
@@ -12,9 +11,15 @@ const productRouter =require('./src/routes/product.js')
 const paymentRouter =require('./src/routes/payment.js')
 const orderRouter =require('./src/routes/order.js')
 const handleError = require('./src/middleware/handleError.js')
+const categoryRouter = require('./src/routes/category.js')
 
 const app = express()
 const port = 8888
+
+const environment = process.env.NODE_ENV || 'development'
+dotenv.config({ path: `.env.${environment}` })
+
+console.log('Môi trường -', environment)
 
 // connect database
 connectDatabase()
@@ -44,9 +49,10 @@ cartRouter(app)
 productRouter(app)
 paymentRouter(app)
 orderRouter(app)
+categoryRouter(app)
 
 app.get('/', (req, res) => {
-    res.json('Hello')
+    res.json('Hello API GearVN')
 })
 
 

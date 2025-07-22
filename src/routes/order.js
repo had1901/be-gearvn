@@ -8,6 +8,7 @@ const orderRouter = (app) => {
     router.post('/get-orders', orderController.getOrdersByUser)
     router.get('/get-all-order', orderController.getAll)
     router.get('/get-group-orders-date', orderController.getGroupByDate)
+    router.post('/update-status', orderController.updateStatus)
     
 
     return app.use(router)

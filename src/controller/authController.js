@@ -11,7 +11,6 @@ dotenv.config({path: `.env.${environment}`})
 
 
 
-
 const authController = {
     login: async (req, res, next) => {
         const { username, password } = req.body
@@ -142,14 +141,54 @@ const authController = {
                 success: true,
             })
     },
-    profile: async (req, res) => {
+    updateProfile: async (req, res, next) => {
         // console.log('user', req.user)
-        const {iat, exp, iss, aud, password, ...infoUser} = req.user
+        const { firstname, lastname, gender, phone, email, day, month, year } = req.body
+        const { id } = req.user
+        console.log(req.body)
+
+        try{
+            if(!id) {
+                return res.status(400).json({
+                    ms: 'Lỗi cập nhật hồ sơ',
+                    ec: 1,
+                })
+            }
+            await db.User.update(
+                {
+                    firstname,
+                    lastname, 
+                    phone,
+                    email,
+                },
+                { where: { id }}
+            )
+            const user = await db.User.findOne({
+                where: { id }
+            })
+            return res.status(200).json({
+                ms: 'Cập nhật hồ sơ thanh công',
+                ec: 0,
+                dt: user
+            })
+        } catch(e) {
+            return next(e)
+        }
+    },
+    profile: async (req, res, next) => {
+        const user = req.user
+        if(!user) {
+            return res.status(403).json({
+                ms: 'Phiên đăng nhập hét hạn',
+                ec: 1,
+            })
+        }
         return res.status(200).json({
-            ms: 'Get profile successfully',
+            ms: null,
             ec: 0,
-            dt: infoUser
+            dt: user
         })
+        
     },
     refreshToken: async (req, res) => {
         const refreshToken = req.cookies?.refresh_token
@@ -401,25 +440,30 @@ const authController = {
     },
     update: async (req,res,next) => {
         console.log(req.body)
-        
+        const { id, username, email, roleId } = req.body
         try{
-            const users = await db.User.update({ 
-                w
-                 
-            })
+            const users = await db.User.update(
+            { 
+                username,
+                email,
+                role_id: roleId
+            },
+            { where: { id } },
+        )
             // console.log(users)
-            if(users.length > 0) {
-                return res.status(200).json({
-                    ms: 'Get all user',
-                    ec: 0,
-                    dt: users
+            if(!users) {
+                return res.status(404).json({
+                    ms: 'Không tìm thấy người dùng',
+                    ec: 1,
                 }) 
             }
-            return res.status(204).json({
-                ms: 'Not found users',
+            return res.status(201).json({
+                ms: 'Cập nhật thành công',
                 ec: 0,
+                dt: users
             }) 
         }catch(e){
+            console.log(e)
             return next(e)
         }
     },

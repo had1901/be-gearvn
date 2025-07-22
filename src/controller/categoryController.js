@@ -8,125 +8,109 @@ const { isArray } = require('util')
 const environment = process.env.NODE_ENV || 'development'
 dotenv.config({path: `.env.${environment}`})
 
+console.log(db.models)
 
-const productController = {
+const categoryController = {
     getAll: async (req,res,next) => {
         try{
-            const products = await db.Product.findAll({
-                // attributes: ['id', 'name', 'description', 'thumbnail', 'price', 'sale_price', 'flash_sale', 'sale_percent', 'stock_quantity', 'rating_count', 'category_id', 'brand_id'],
-                include: [
-                    { 
-                        model: db.Brand,
-                        attributes: ['id', 'name'] 
-                    },
-                    { 
-                        model: db.Category,
-                        attributes: ['id', 'tag', 'name', 'slug'] 
-                    },
-                    { 
-                        model: db.Product_images,
-                        attributes: ['id', 'product_id', 'url'] 
-                    },
-                ],
+            const categories = await db.Category.findAll({
                 logging: false,
                 order: [['createdAt', 'DESC']]
-                // nest: true,
-                // raw: true,
             })  
-            if(!products) {
+            if(!categories) {
                 return res.status(400).json({
-                    ms: 'No product',
+                    ms: 'No categories',
                     ec: 1
                 })
             } 
             return res.status(200).json({
-                ms: 'Get all product',
+                ms: 'Get all categories',
                 ec: 0,
-                dt: products
+                dt: categories
             }) 
         } catch(e){
             return next(e)
         }
     },
-    getById: async (req,res,next) => {
-        const { id } = req.body
-        try{
-            const product = await db.Product.findOne({
-                where: { id: id },
-                attributes: ['id', 'name', 'description', 'thumbnail', 'price', 'content', 'sale_price', 'flash_sale', 'sale_percent', 'stock_quantity', 'rating_count', 'category_id', 'brand_id'],
-                include: [
-                    { 
-                        model: db.Brand,
-                        attributes: ['id', 'name'] 
-                    },
-                    { 
-                        model: db.Category,
-                        attributes: ['id', 'tag', 'name', 'slug'] 
-                    },
-                    { 
-                        model: db.Product_images,
-                        attributes: ['id', 'url'] 
-                    },
-                ],
-                logging: false,
-                // nest: true,
-                // raw: true,
-            })   
-            if(!product) {
-                return res.status(400).json({
-                    ms: 'No product',
-                    ec: 1
-                })
-            } 
-            return res.status(200).json({
-                ms: 'Get  product',
-                ec: 0,
-                dt: product
-            }) 
-        } catch(e){
-            return next(e)
-        }
-    },
-    getByCategory: async (req,res,next) => {
-        console.log('query', req.query.category)
-        const { category } = req.query
-        try{
-            const products = await db.Product.findAll({
-                attributes: ['id', 'name', 'description', 'thumbnail', 'price', 'sale_price', 'flash_sale', 'sale_percent', 'stock_quantity', 'rating_count', 'category_id', 'brand_id'],
-                include: [
-                    { 
-                        model: db.Brand,
-                        attributes: ['id', 'name'] 
-                    },
-                    { 
-                        model: db.Category,
-                        attributes: ['id', 'tag', 'name', 'slug'],
-                        where: { 
-                            tag: {
-                                [Op.like]: `%${category}%` 
-                        }   } 
-                    },
-                ],
-                logging: false,
-                nest: true,
-                raw: true,
-            })   
-            if(!products) {
-                return res.status(400).json({
-                    ms: 'No product',
-                    ec: 1
-                })
-            } 
-            return res.status(200).json({
-                ms: 'Get all product',
-                ec: 0,
-                dt: products
-            }) 
+    // getById: async (req,res,next) => {
+    //     const { id } = req.body
+    //     try{
+    //         const product = await db.Product.findOne({
+    //             where: { id: id },
+    //             attributes: ['id', 'name', 'description', 'thumbnail', 'price', 'content', 'sale_price', 'flash_sale', 'sale_percent', 'stock_quantity', 'rating_count', 'category_id', 'brand_id'],
+    //             include: [
+    //                 { 
+    //                     model: db.Brand,
+    //                     attributes: ['id', 'name'] 
+    //                 },
+    //                 { 
+    //                     model: db.Category,
+    //                     attributes: ['id', 'tag', 'name', 'slug'] 
+    //                 },
+    //                 { 
+    //                     model: db.Product_images,
+    //                     attributes: ['id', 'url'] 
+    //                 },
+    //             ],
+    //             logging: false,
+    //             // nest: true,
+    //             // raw: true,
+    //         })   
+    //         if(!product) {
+    //             return res.status(400).json({
+    //                 ms: 'No product',
+    //                 ec: 1
+    //             })
+    //         } 
+    //         return res.status(200).json({
+    //             ms: 'Get  product',
+    //             ec: 0,
+    //             dt: product
+    //         }) 
+    //     } catch(e){
+    //         return next(e)
+    //     }
+    // },
+    // getByCategory: async (req,res,next) => {
+    //     console.log('query', req.query.category)
+    //     const { category } = req.query
+    //     try{
+    //         const products = await db.Product.findAll({
+    //             attributes: ['id', 'name', 'description', 'thumbnail', 'price', 'sale_price', 'flash_sale', 'sale_percent', 'stock_quantity', 'rating_count', 'category_id', 'brand_id'],
+    //             include: [
+    //                 { 
+    //                     model: db.Brand,
+    //                     attributes: ['id', 'name'] 
+    //                 },
+    //                 { 
+    //                     model: db.Category,
+    //                     attributes: ['id', 'tag', 'name', 'slug'],
+    //                     where: { 
+    //                         tag: {
+    //                             [Op.like]: `%${category}%` 
+    //                     }   } 
+    //                 },
+    //             ],
+    //             logging: false,
+    //             nest: true,
+    //             raw: true,
+    //         })   
+    //         if(!products) {
+    //             return res.status(400).json({
+    //                 ms: 'No product',
+    //                 ec: 1
+    //             })
+    //         } 
+    //         return res.status(200).json({
+    //             ms: 'Get all product',
+    //             ec: 0,
+    //             dt: products
+    //         }) 
             
-        } catch(e){
-            return next(e)
-        }
-    },
+    //     } catch(e){
+    //         return next(e)
+    //     }
+    // },
     // updateProduct: async (req,res,next) => {
     //     // console.log('body',req.body)
     //     // console.log('files',req.files)
@@ -366,159 +350,159 @@ const productController = {
         
     // },
     
-    updateProduct: async (req,res,next) => {
-        console.log('body', req.body)
-        if (!Object.keys(req.body || {}).length) {
-            return res.status(404).json({ 
-                ms: 'Vui lòng gửi lên đầy đủ dữ liệu',
-                ec: 1,
-            })
-        }
+    // updateProduct: async (req,res,next) => {
+    //     console.log('body', req.body)
+    //     if (!Object.keys(req.body || {}).length) {
+    //         return res.status(404).json({ 
+    //             ms: 'Vui lòng gửi lên đầy đủ dữ liệu',
+    //             ec: 1,
+    //         })
+    //     }
 
-        const { id, name, description, description_short, flash_sale, avatar, collection, price, sale_price, content, stock, Category, Brand } = req.body
-        const transactionInstance = await db.sequelize.transaction()
-        try{
-            const updatedData = {
-                name,
-                description,
-                price,
-                sale_price,
-                stock_quantity: stock,
-                content: content || null,
-                flash_sale,
-                thumbnail: avatar,
-                category_id: Category,
-                brand_id: Brand
-            }
-            if(avatar) {
-                updatedData.thumbnail = avatar
-            }
-            const [updatedProduct] = await db.Product.update(updatedData, 
-                { where: { id } }, 
-                { transaction: transactionInstance }
-            )
-            if (updatedProduct === 0) {
-                return res.status(400).json({
-                    ms: 'Không tìm thấy sản phẩm cần cập nhật',
-                    ec: 1,
-                })
-            } 
-            const product = await db.Product.findByPk(id)
-            console.log('id', product.dataValues.id)
-            if(product.dataValues.id && collection) {
+    //     const { id, name, description, description_short, flash_sale, avatar, collection, price, sale_price, content, stock, Category, Brand } = req.body
+    //     const transactionInstance = await db.sequelize.transaction()
+    //     try{
+    //         const updatedData = {
+    //             name,
+    //             description,
+    //             price,
+    //             sale_price,
+    //             stock_quantity: stock,
+    //             content: content || null,
+    //             flash_sale,
+    //             thumbnail: avatar,
+    //             category_id: Category,
+    //             brand_id: Brand
+    //         }
+    //         if(avatar) {
+    //             updatedData.thumbnail = avatar
+    //         }
+    //         const [updatedProduct] = await db.Product.update(updatedData, 
+    //             { where: { id } }, 
+    //             { transaction: transactionInstance }
+    //         )
+    //         if (updatedProduct === 0) {
+    //             return res.status(400).json({
+    //                 ms: 'Không tìm thấy sản phẩm cần cập nhật',
+    //                 ec: 1,
+    //             })
+    //         } 
+    //         const product = await db.Product.findByPk(id)
+    //         console.log('id', product.dataValues.id)
+    //         if(product.dataValues.id && collection) {
 
-                // Xóa ảnh trước khi thêm ảnh mới
-                const remove = await db.Product_images.destroy({
-                    where: { product_id: product.dataValues.id },
-                    transaction: transactionInstance
-                })
-                console.log('Xóa', remove)
-                if(remove) {
-                    console.log('Đã xóa')
-                }
-                // Thêm ảnh mới
-                const collectionImage = collection?.map(url => (
-                    {
-                        url,
-                        product_id: product.dataValues.id
-                    }
-                ))
-                console.log('Danh sách ảnh mới', collectionImage)
+    //             // Xóa ảnh trước khi thêm ảnh mới
+    //             const remove = await db.Product_images.destroy({
+    //                 where: { product_id: product.dataValues.id },
+    //                 transaction: transactionInstance
+    //             })
+    //             console.log('Xóa', remove)
+    //             if(remove) {
+    //                 console.log('Đã xóa')
+    //             }
+    //             // Thêm ảnh mới
+    //             const collectionImage = collection?.map(url => (
+    //                 {
+    //                     url,
+    //                     product_id: product.dataValues.id
+    //                 }
+    //             ))
+    //             console.log('Danh sách ảnh mới', collectionImage)
 
-                if(collectionImage.length > 0) {
-                    console.log('Thêm mới collection')
-                    await db.Product_images.bulkCreate(collectionImage, { transaction: transactionInstance })
-                }
-            }
-            await transactionInstance.commit()
-            return res.status(200).json({
-                ms: 'Client update',
-                ec: 0
-            })
-        } catch(e) {
-            console.log(e)
-            await transactionInstance.rollback()
-            return next(e)
-        }
-    },
-    createNewProduct: async (req,res,next) => {
-        console.log('body', req.body)
+    //             if(collectionImage.length > 0) {
+    //                 console.log('Thêm mới collection')
+    //                 await db.Product_images.bulkCreate(collectionImage, { transaction: transactionInstance })
+    //             }
+    //         }
+    //         await transactionInstance.commit()
+    //         return res.status(200).json({
+    //             ms: 'Client update',
+    //             ec: 0
+    //         })
+    //     } catch(e) {
+    //         console.log(e)
+    //         await transactionInstance.rollback()
+    //         return next(e)
+    //     }
+    // },
+    // createNewProduct: async (req,res,next) => {
+    //     console.log('body', req.body)
 
-        if (!Object.keys(req.body || {}).length) {
-            return res.status(404).json({ 
-                ms: 'Vui lòng gửi lên đầy đủ dữ liệu',
-                ec: 1,
-            })
-        }
-        const { name, description, description_short, flash_sale, price, avatar, collection, sale_price, content, stock, Category, Brand } = req.body
-        const transactionInstance = await db.sequelize.transaction()
-        const data = {
-                name,
-                description,
-                price, 
-                sale_price,
-                content,
-                thumbnail: avatar,
-                stock_quantity: stock,
-                category_id: Category,
-                brand_id: Brand,
-        }
-        try{
-            const createdProduct = await db.Product.create(data, { transaction: transactionInstance })
-            if(!createdProduct) {
-                await transactionInstance.rollback()
-                return res.status(400).json({
-                    ms: 'Tạo mới không thành công',
-                    ec: 1,
-                }) 
-            }
-            const { id } = createdProduct.dataValues
-            let collectionImage
-            if(Array.isArray(collection) && collection.length > 0) {
-                collectionImage = collection.map(url => (
-                    {
-                        url,
-                        product_id: id
-                    }
-                ))
-            } else {
-                collectionImage = { url: collection, product_id: id }
-            }
+    //     if (!Object.keys(req.body || {}).length) {
+    //         return res.status(404).json({ 
+    //             ms: 'Vui lòng gửi lên đầy đủ dữ liệu',
+    //             ec: 1,
+    //         })
+    //     }
+    //     const { name, description, description_short, flash_sale, price, avatar, collection, sale_price, content, stock, Category, Brand } = req.body
+    //     const transactionInstance = await db.sequelize.transaction()
+    //     const data = {
+    //             name,
+    //             description,
+    //             price, 
+    //             sale_price,
+    //             content,
+    //             thumbnail: avatar,
+    //             stock_quantity: stock,
+    //             category_id: Category,
+    //             brand_id: Brand,
+    //     }
+    //     try{
+    //         const createdProduct = await db.Product.create(data, { transaction: transactionInstance })
+    //         if(!createdProduct) {
+    //             await transactionInstance.rollback()
+    //             return res.status(400).json({
+    //                 ms: 'Tạo mới không thành công',
+    //                 ec: 1,
+    //             }) 
+    //         }
+    //         const { id } = createdProduct.dataValues
+    //         let collectionImage
+    //         if(Array.isArray(collection) && collection.length > 0) {
+    //             collectionImage = collection.map(url => (
+    //                 {
+    //                     url,
+    //                     product_id: id
+    //                 }
+    //             ))
+    //         } else {
+    //             collectionImage = { url: collection, product_id: id }
+    //         }
             
-            if(collectionImage || collectionImage.length > 0) {
-                await db.Product_images.bulkCreate(collectionImage, { transaction: transactionInstance })
-            }
+    //         if(collectionImage || collectionImage.length > 0) {
+    //             await db.Product_images.bulkCreate(collectionImage, { transaction: transactionInstance })
+    //         }
 
-            await transactionInstance.commit()
-            console.log('Tạo mới xong')
-            return res.status(200).json({
-                ms: 'Client create',
-                ec: 0
-            })
-        } catch(e) {
-            console.log(e)
-            await transactionInstance.rollback()
-            return next(e)
-        }
-    },
-    remove: async (req,res,next) => {
-        const { id } = req.params
-        try{
-            const removeProduct = await db.Product.destroy({ where: { id } })  
-            if(!removeProduct) {
-                return res.status(400).json({
-                    ms: 'Không tìm thấy sản phẩm cần xóa',
-                    ec: 1
-                })
-            } 
-            return res.status(200).json({
-                ms: 'Xóa thành công',
-                ec: 0,
-            }) 
-        } catch(e){
-            return next(e)
-        }
-    },
+    //         await transactionInstance.commit()
+    //         console.log('Tạo mới xong')
+    //         return res.status(200).json({
+    //             ms: 'Client create',
+    //             ec: 0
+    //         })
+    //     } catch(e) {
+    //         console.log(e)
+    //         await transactionInstance.rollback()
+    //         return next(e)
+    //     }
+    // },
+    // remove: async (req,res,next) => {
+    //     const { id } = req.params
+    //     try{
+    //         const removeProduct = await db.Product.destroy({ where: { id } })  
+    //         if(!removeProduct) {
+    //             return res.status(400).json({
+    //                 ms: 'Không tìm thấy sản phẩm cần xóa',
+    //                 ec: 1
+    //             })
+    //         } 
+    //         return res.status(200).json({
+    //             ms: 'Xóa thành công',
+    //             ec: 0,
+    //         }) 
+    //     } catch(e){
+    //         return next(e)
+    //     }
+    // },
 }
 
-module.exports = productController
+module.exports = categoryController

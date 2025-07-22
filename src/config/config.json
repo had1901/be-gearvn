@@ -15,9 +15,9 @@
     "dialect": "mysql"
   },
   "production": {
-    "username": "root",
-    "password": null,
-    "database": "database_production",
+    "username": "lccqyija_ductoclx01",
+    "password": "1912001d",
+    "database": "lccqyija_gear-vn",
     "host": "127.0.0.1",
     "dialect": "mysql"
   }

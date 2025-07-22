@@ -19,6 +19,9 @@ const orderController = {
                         total_price: total,
                         ship_cod: 0,
                         discount: 0,
+                        username: name,
+                        phone,
+                        genre,
                         shipping_address: fullAddress,
                         pay_method: methodPay,
                         status_payment: 'pending',
@@ -83,9 +86,6 @@ const orderController = {
                 return next(e)
             }
         }
-        
-        
-    
     },
     getAll: async (req,res,next) => {
         try{
@@ -99,10 +99,27 @@ const orderController = {
                                 model: db.Product
                             }
                         ] 
-                    }
-                    
+                    },
+                    { 
+                        model: db.User,
+                    },
+
                 ],
-                nest: true, 
+                order: [
+                    [
+                        // Nếu status là 'pending' thì trả về 0 (ưu tiên lên đầu), còn lại là 1
+                        Sequelize.literal(`
+                            CASE 
+                                WHEN status_payment = 'pending' THEN 0  
+                                WHEN status_payment = 'completed' THEN 1
+                                ELSE 2 
+                            END`
+                        ),
+                        'ASC'
+                    ],
+                    ['createdAt', 'DESC'], // Sau đó sắp xếp tiếp theo thời gian tạo mới nhất
+                ]
+                // nest: true, 
             })
             if(orders.length > 0) {
                 return res.status(200).json({
@@ -164,6 +181,35 @@ const orderController = {
             }) 
         }catch(e){
             return next(e)
+        }
+    },
+    updateStatus: async (req,res,next) => {
+        const { id, status_payment, status_transpost } = req.body
+
+        if(id) {
+            try{
+                const updatedStatus = await db.Order.update(
+                { 
+                    status_payment,
+                    status_transpost
+                },
+                { where: { id } },
+            )
+                if(!updatedStatus) {
+                    return res.status(400).json({
+                        ms: 'Cập nhật thất bại',
+                        ec: 1,
+                    }) 
+                    
+                }
+                return res.status(200).json({
+                        ms: 'Cập nhật trạng thái thành công',
+                        ec: 0,
+                    }) 
+            }catch(e){
+                console.log(e)
+                return next(e)
+            }
         }
     },
 }
