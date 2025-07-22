@@ -21,7 +21,8 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'Category',
-    freezeTableName: true
+    freezeTableName: true,
+    tableName: 'category',
 
   });
   return Category;
