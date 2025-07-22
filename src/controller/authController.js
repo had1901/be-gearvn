@@ -219,15 +219,15 @@ const authController = {
                 })
                 res.cookie('access_token', new_access_token, { 
                     httpOnly:true,
-                    // secure: false,
-                    // sameSite: 'none',
+                    secure: environment === 'production',
+                    sameSite: environment === 'production' ? 'none' : 'strict',
                     maxAge: 600000,
                     path: '/'
                 })
                 res.cookie('refresh_token', new_refresh_token, { 
                     httpOnly:true,
-                    // secure: false,
-                    // sameSite: 'none',
+                    secure: environment === 'production',
+                    sameSite: environment === 'production' ? 'none' : 'strict',
                     maxAge: 7 * 24 * 60 * 60 * 1000,
                     path: '/'
                 })
@@ -301,15 +301,15 @@ const authController = {
             
             res.cookie('access_token', access_token, { 
                 httpOnly:true,
-                // secure: false,
-                // sameSite: 'none',
+                secure: environment === 'production',
+                sameSite: environment === 'production' ? 'none' : 'strict',
                 maxAge: 600000,
                 path: '/'
             })
             res.cookie('refresh_token', refresh_token, { 
                 httpOnly:true,
-                // secure: false,
-                // sameSite: 'none',
+                secure: environment === 'production',
+                sameSite: environment === 'production' ? 'none' : 'strict',
                 maxAge: 7 * 24 * 60 * 60 * 1000,
                 path: '/'
             })
