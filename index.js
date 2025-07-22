@@ -52,7 +52,12 @@ orderRouter(app)
 categoryRouter(app)
 
 app.get('/', (req, res) => {
-    res.json('Hello API GearVN')
+    res.json({
+        ms: 'Hello API GearVN',
+        environment: process.env.NODE_ENV,
+        database: process.env.DATABASE_NAME,
+        
+    })
 })
 
 
