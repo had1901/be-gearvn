@@ -25,7 +25,7 @@ console.log('Môi trường -', environment)
 connectDatabase()
 
 // middleware
-const allowedOrigins = ['http://localhost:5173', 'https://your-production-site.com']
+const allowedOrigins = ['http://localhost:5173', 'https://your-production-site.com', 'https://gearvn-rust.vercel.app/']
 app.use(cors({
     origin: function (origin, callback) {
         if (!origin || allowedOrigins.includes(origin)) {
@@ -56,7 +56,7 @@ app.get('/', (req, res) => {
         ms: 'Hello API GearVN',
         environment: process.env.NODE_ENV,
         database: process.env.DATABASE_NAME,
-        
+
     })
 })
 
