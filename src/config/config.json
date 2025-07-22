@@ -5,7 +5,10 @@
     "database": "gearvn",
     "host": "127.0.0.1",
     "dialect": "mysql",
-    "logging" : false
+    "logging" : false,
+    "define": {
+      "freezeTableName": true 
+    }
   },
   "test": {
     "username": "lccqyija_ductoclx01",
@@ -13,7 +16,10 @@
     "database": "lccqyija_gear-vn",
     "host": "103.97.126.29",
     "dialect": "mysql",
-    "logging" : false
+    "logging" : false,
+    "define": {
+      "freezeTableName": true 
+    }
   },
   "production": {
     "username": "lccqyija_ductoclx01",
@@ -21,6 +27,9 @@
     "database": "lccqyija_gear-vn",
     "host": "103.97.126.29",
     "dialect": "mysql",
-    "logging" : false
+    "logging" : false,
+    "define": {
+      "freezeTableName": true 
+    }
   }
 }
