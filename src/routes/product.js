@@ -16,7 +16,8 @@ const productRouter = (app) => {
     // router.post('/create-new-product', middlewareUpload, productController.createNewProduct)
     router.post('/client/update-product', middlewareUpload, productController.updateProduct)
     router.post('/client/create-new-product', middlewareUpload, productController.createNewProduct) // tạo và upload từ client
-    router.delete('/delete-product/:id', productController.remove) // tạo và upload từ client
+    router.delete('/delete-product/:id', productController.remove) 
+    router.post('/search-product', productController.searchProducts) 
 
 
     return app.use('/api', router)

@@ -519,6 +519,41 @@ const productController = {
             return next(e)
         }
     },
+    searchProducts: async (req,res,next) => {
+        const query = req.query
+        console.log(query)
+        console.log(req.body)
+        const { keyword } = req.body
+        try{
+            const searchProduct = await db.Product.findAll({ 
+                where: db.sequelize.where(
+                    // db.sequelize.fn('lower', db.sequelize.col('name')), 
+                    db.sequelize.fn('REPLACE', db.sequelize.fn('LOWER', db.sequelize.col('name')),' ',''),
+                    {
+                        [Op.like]: `${keyword}%`
+                    }
+                )
+            })  
+            if(!searchProduct) {
+                return res.status(400).json({
+                    ms: 'Không tìm thấy sản phẩm',
+                    ec: 1
+                })
+            } 
+            return res.status(200).json({
+                ms: 'Search',
+                ec: 0,
+                dt: searchProduct
+            }) 
+        } catch(e){
+            return next(e)
+        }
+        return res.status(200).json({
+            ms: 'Search',
+            ec: 0,
+            dt: req.body
+        })
+    },
 }
 
 module.exports = productController
