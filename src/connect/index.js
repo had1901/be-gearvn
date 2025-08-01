@@ -9,7 +9,7 @@ const connectDatabase = async () => {
         const sequelize = new Sequelize(process.env.DATABASE_NAME, process.env.DB_USERNAME, process.env.PASSWORD, {
             host: process.env.HOST,
             dialect: process.env.DATABASE,
-            port: process.env.DATABASE_PORT,
+            port: 3306,
             logging: false,
             define: {
                 freezeTableName: true 
