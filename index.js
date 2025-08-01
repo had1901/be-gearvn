@@ -14,7 +14,7 @@ const handleError = require('./src/middleware/handleError.js')
 const categoryRouter = require('./src/routes/category.js')
 
 const app = express()
-const port = process.env.PORT || 8888
+const port = 8888
 
 const environment = process.env.NODE_ENV || 'development'
 dotenv.config({ path: `.env.${environment}` })
@@ -73,6 +73,6 @@ app.get('/', (req, res) => {
 
 app.use(handleError)
 
-app.listen(port, '0.0.0.0', () => {
+app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)
 })
