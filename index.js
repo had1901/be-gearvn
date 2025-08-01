@@ -25,7 +25,7 @@ console.log('Môi trường -', environment)
 connectDatabase()
 
 // middleware
-const allowedOrigins = ['http://localhost:5173', 'https://your-production-site.com', 'https://gearvn-rust.vercel.app']
+const allowedOrigins = ['http://localhost:5173', 'https://gearvn-rust.vercel.app']
 app.use(cors({
     origin: function (origin, callback) {
         if (!origin || allowedOrigins.includes(origin)) {
