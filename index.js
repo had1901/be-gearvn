@@ -52,6 +52,13 @@ paymentRouter(app)
 orderRouter(app)
 categoryRouter(app)
 
+app.get('/ip', (req, res) => {
+  const os = require('os');
+  const interfaces = os.networkInterfaces()
+  console.log('ip', interfaces)
+  res.json(interfaces)
+})
+
 app.get('/', (req, res) => {
     res.json({
         ms: 'Hello API GearVN',
