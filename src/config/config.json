@@ -11,7 +11,7 @@
     }
   },
   "test": {
-    "username": "lccqyija_ductoclx01",
+    "username": "lccqyija_ductoclx02",
     "password": "1912001d",
     "database": "lccqyija_gear-vn",
     "host": "103.97.126.29",
@@ -22,7 +22,7 @@
     }
   },
   "production": {
-    "username": "lccqyija_ductoclx01",
+    "username": "lccqyija_ductoclx02",
     "password": "1912001d",
     "database": "lccqyija_gear-vn",
     "host": "103.97.126.29",
