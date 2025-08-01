@@ -16,11 +16,11 @@ const connectDatabase = async () => {
             },
         })
         await sequelize.authenticate()
-        if (environment === 'development') {
-            await sequelize.sync({ force: true })
-        } else {
-            await sequelize.sync()
-        }
+        // if (environment === 'development') {
+        //     await sequelize.sync({ force: true })
+        // } else {
+        //     await sequelize.sync()
+        // }
         console.log('Connection database successfully.')
         console.log({
           'HOST:': process.env.HOST,
