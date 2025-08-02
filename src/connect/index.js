@@ -14,6 +14,8 @@ const connectDatabase = async () => {
             define: {
                 freezeTableName: true 
             },
+            
+
         })
         await sequelize.authenticate()
         await sequelize.sync({ force: true })
@@ -21,7 +23,7 @@ const connectDatabase = async () => {
         console.log('Connection database successfully.')
         console.log({
           'HOST:': process.env.HOST,
-          'DATABASE:': process.env.DATABASE,
+          'DATABASE:': process.env.DATABASE_NAME,
           'USERNAME:': process.env.DB_USERNAME,
           'PASSWORD:': process.env.PASSWORD,
         })

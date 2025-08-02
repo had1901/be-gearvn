@@ -52,23 +52,18 @@ paymentRouter(app)
 orderRouter(app)
 categoryRouter(app)
 
-app.get('/ip', (req, res) => {
-  const os = require('os');
-  const interfaces = os.networkInterfaces()
-  console.log('ip', interfaces)
-  res.json(interfaces)
-})
 
 app.get('/', (req, res) => {
     res.json({
-        ms: 'Hello API GearVN',
-        environment: process.env.NODE_ENV,
+        message: 'Hello API GearVN',
+        mode: process.env.NODE_ENV,
         database: process.env.DATABASE_NAME,
+        username: process.env.DB_USERNAME,
+        host: process.env.HOST,
+        password: process.env.PASSWORD,
 
     })
 })
-
-
 
 
 app.use(handleError)
