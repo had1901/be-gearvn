@@ -11,10 +11,10 @@
     }
   },
   "test": {
-    "username": "ctkydpul_ductoclx01",
-    "password": "1912001d",
-    "database": "ctkydpul_gear-vn",
-    "host": "103.97.126.29",
+    "username": "root",
+    "password": "NTYYVkjLOSgSxemkGhtjggLfzbsTwUXJ",
+    "database": "railway",
+    "host": "mysql.railway.internal",
     "dialect": "mysql",
     "logging" : false,
     "define": {
@@ -22,10 +22,10 @@
     }
   },
   "production": {
-    "username": "ctkydpul_ductoclx01",
-    "password": "1912001d",
-    "database": "ctkydpul_gear-vn",
-    "host": "103.97.126.29",
+    "username": "root",
+    "password": "NTYYVkjLOSgSxemkGhtjggLfzbsTwUXJ",
+    "database": "railway",
+    "host": "mysql.railway.internal",
     "dialect": "mysql",
     "logging" : false,
     "define": {
