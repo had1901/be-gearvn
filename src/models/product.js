@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       Product.belongsTo(models.Category, { foreignKey: 'category_id'})
       Product.belongsTo(models.Brand, { foreignKey: 'brand_id'})
-      Product.hasMany(models.Product_images, { foreignKey: 'product_id'})
+      Product.hasMany(models.Product_images, { onDelete: 'cascade', hooks: true, foreignKey: 'product_id'})
       Product.hasMany(models.Cart_item, { foreignKey: 'product_id'})
       Product.hasMany(models.Order_detail, { foreignKey: 'product_id'})
     }

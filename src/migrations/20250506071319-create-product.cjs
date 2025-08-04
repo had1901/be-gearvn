@@ -15,6 +15,7 @@ module.exports = {
           model: 'category',
           key: 'id'
         }
+        
       },
       brand_id: {
         type: Sequelize.INTEGER,
