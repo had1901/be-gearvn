@@ -122,16 +122,16 @@ const authController = {
     logout: async (req, res) => {
         console.log('logout')
             res.clearCookie('access_token',{ 
-                httpOnly:true,
-                // secure: false,
-                // sameSite: 'none',
+                httpOnly: true,
+                secure: environment === 'production',
+                sameSite: environment === 'production' ? 'none' : 'strict',
                 maxAge: 600000,
                 path: '/'
             })
             res.clearCookie('refresh_token', { 
-                httpOnly:true,
-                // secure: false,
-                // sameSite: 'none',
+                httpOnly: true,
+                secure: environment === 'production',
+                sameSite: environment === 'production' ? 'none' : 'strict',
                 maxAge: 7 * 24 * 60 * 60 * 1000,
                 path: '/'
             })
