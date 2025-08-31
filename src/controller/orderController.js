@@ -93,12 +93,12 @@ const orderController = {
                 include: [
                     { 
                         model: db.Order_detail,
-                        attributes: ['id', 'order_id', 'product_id', 'quantity', 'price', 'discount', 'status'],
+                        attributes: ['id', 'order_id', 'product_id', 'quantity', 'price', 'discount', 'status', 'createdAt'],
                         include: [
                             {
                                 model: db.Product
                             }
-                        ] 
+                        ],
                     },
                     { 
                         model: db.User,
@@ -140,32 +140,10 @@ const orderController = {
         try{
             const orders = await db.Order.findAll({ 
                 attributes: [
-                    'id',
-                    'user_id',
-                    'order_code',
-                    'total_price',
-                    'ship_cod',
-                    'discount',
-                    'shipping_address',
-                    'pay_method',
-                    'status_payment',
-                    'status_transpost',
                     [Sequelize.fn('DATE', Sequelize.col('Order.createdAt')), 'date'],
                     [Sequelize.fn('COUNT', Sequelize.col('Order.id')), 'totalOrders']
                 ],
                 group: [Sequelize.fn('DATE', Sequelize.col('Order.createdAt'))],
-                include: [
-                    { 
-                        model: db.Order_detail,
-                        attributes: ['id', 'order_id', 'product_id', 'quantity', 'price', 'discount', 'status'],
-                        include: [
-                            {
-                                model: db.Product
-                            }
-                        ] 
-                    }
-                    
-                ],
                 nest: true, 
             })
             if(orders.length > 0) {

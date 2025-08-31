@@ -12,6 +12,7 @@ const paymentRouter =require('./src/routes/payment.js')
 const orderRouter =require('./src/routes/order.js')
 const handleError = require('./src/middleware/handleError.js')
 const categoryRouter = require('./src/routes/category.js')
+const chatbotRouter = require('./src/routes/chatbot.js')
 
 const app = express()
 const port = 8888
@@ -51,7 +52,7 @@ productRouter(app)
 paymentRouter(app)
 orderRouter(app)
 categoryRouter(app)
-
+chatbotRouter(app)
 
 app.get('/', (req, res) => {
     res.json({
