@@ -286,7 +286,7 @@ const authController = {
                     address: null,
                     firstname: null,
                     lastname: null,
-                    role_id: 3,
+                    role_id: 2,
                 })
             }
             const payloadUser = {
